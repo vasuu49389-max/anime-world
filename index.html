@@ -2,424 +2,517 @@
 <!DOCTYPE html>
 <html lang="te">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#090914">
-  <link rel="manifest" href="./manifest.json">
-  <title>ANIME WORLD</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090914">
+<link rel="manifest" href="./manifest.json">
+<title>ANIME WORLD</title>
 
-  <style>
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      background: #090914;
-      color: white;
-      font-family: Arial, sans-serif;
-    }
-
-    header {
-      padding: 22px 16px;
-      background: #151329;
-      border-bottom: 1px solid #292443;
-    }
-
-    header h1 {
-      color: #a78bfa;
-      margin: 0;
-      font-size: 26px;
-    }
-
-    header p { color: #aaa; }
-
-    .search { padding: 15px; }
-
-    input {
-      width: 100%;
-      padding: 14px;
-      border-radius: 12px;
-      border: 1px solid #514477;
-      background: #1b1930;
-      color: white;
-      font-size: 16px;
-    }
-
-    h2 { padding: 0 15px; }
-
-    .anime-list {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-      padding: 15px;
-    }
-
-    .card {
-      background: #19172a;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 1px solid #30294a;
-    }
-
-    .poster {
-      height: 155px;
-      display: grid;
-      place-items: center;
-      font-size: 65px;
-      background: linear-gradient(135deg,#45216b,#17152e);
-    }
-
-    .card h3 { padding: 0 10px; }
-
-    button {
-      cursor: pointer;
-    }
-
-    .card button {
-      margin: 0 10px 12px;
-      width: calc(100% - 20px);
-      padding: 11px;
-      border: 0;
-      border-radius: 8px;
-      background: #8055e9;
-      color: white;
-      font-weight: bold;
-    }
-
-    .player-section {
-      display: none;
-      padding: 15px;
-      margin: 15px;
-      background: #19172a;
-      border: 1px solid #514477;
-      border-radius: 14px;
-    }
-
-    .player-section h2 {
-      padding: 0;
-      color: #c4b5fd;
-    }
-
-    .video-container {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      background: black;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .video-container iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
-    .episode-list {
-      display: grid;
-      gap: 10px;
-      margin-top: 15px;
-    }
-
-    .episode-btn {
-      padding: 13px;
-      background: #292044;
-      color: white;
-      border: 1px solid #8055e9;
-      border-radius: 8px;
-      text-align: left;
-    }
-
-    .episode-btn.active {
-      background: #8055e9;
-    }
-
-    .controls {
-      display: flex;
-      gap: 10px;
-      margin-top: 15px;
-    }
-
-    .controls button {
-      flex: 1;
-      padding: 12px 5px;
-      background: #8055e9;
-      color: white;
-      border: 0;
-      border-radius: 8px;
-      font-weight: bold;
-    }
-
-    .controls button:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-
-    .message {
-      color: #bbb;
-      line-height: 1.6;
-    }
-
-    footer {
-      text-align: center;
-      padding: 25px;
-      color: #888;
-    }
-
-    @media (max-width: 360px) {
-      .anime-list { gap: 8px; padding: 10px; }
-      .poster { height: 120px; }
-    }
-  </style>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;background:#090914;color:white;
+  font-family:Arial,sans-serif
+}
+header{
+  padding:22px 16px;background:#151329;
+  border-bottom:1px solid #292443
+}
+header h1{color:#a78bfa;margin:0;font-size:26px}
+header p{color:#aaa}
+.search{padding:15px}
+input,select{
+  width:100%;padding:13px;border-radius:10px;
+  border:1px solid #514477;background:#1b1930;
+  color:white;font-size:16px;margin:6px 0
+}
+h2{padding:0 15px}
+.anime-list{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:14px;padding:15px
+}
+.card{
+  background:#19172a;border-radius:14px;
+  overflow:hidden;border:1px solid #30294a
+}
+.poster{
+  height:155px;display:grid;place-items:center;
+  font-size:65px;
+  background:linear-gradient(135deg,#45216b,#17152e);
+  overflow:hidden
+}
+.poster img{
+  width:100%;height:100%;object-fit:cover
+}
+.card h3{padding:0 10px}
+button{cursor:pointer}
+.card button{
+  margin:0 5px 12px;padding:11px 5px;
+  width:calc(50% - 12px);border:0;border-radius:8px;
+  background:#8055e9;color:white;font-weight:bold
+}
+.card .edit-btn{background:#39304f}
+.customizer,.player-section{
+  display:none;padding:15px;margin:15px;
+  background:#19172a;border:1px solid #514477;
+  border-radius:14px
+}
+.customizer h2,.player-section h2{
+  padding:0;color:#c4b5fd
+}
+.customizer button,.controls button{
+  padding:12px;background:#8055e9;color:white;
+  border:0;border-radius:8px;font-weight:bold
+}
+.customizer button{width:100%;margin:5px 0}
+.preview{
+  width:130px;height:130px;margin:10px auto;
+  border-radius:12px;overflow:hidden;
+  background:#292044;display:grid;place-items:center;
+  font-size:50px
+}
+.preview img{width:100%;height:100%;object-fit:cover}
+.video-container{
+  width:100%;aspect-ratio:16/9;background:black;
+  border-radius:10px;overflow:hidden
+}
+.video-container iframe{width:100%;height:100%;border:0}
+.episode-list{display:grid;gap:10px;margin-top:15px}
+.episode-btn{
+  padding:13px;background:#292044;color:white;
+  border:1px solid #8055e9;border-radius:8px;
+  text-align:left
+}
+.episode-btn.active{background:#8055e9}
+.controls{display:flex;gap:10px;margin-top:15px}
+.controls button{flex:1}
+.controls button:disabled{opacity:.4}
+.message{color:#bbb;line-height:1.6}
+footer{text-align:center;padding:25px;color:#888}
+@media(max-width:360px){
+  .anime-list{gap:8px;padding:10px}
+  .poster{height:120px}
+}
+</style>
 </head>
 
 <body>
 
 <header>
-  <h1>⚡ ANIME WORLD</h1>
-  <p>మీ Anime ప్రపంచంలోకి స్వాగతం!</p>
+<h1>⚡ ANIME WORLD</h1>
+<p>మీ Anime ప్రపంచంలోకి స్వాగతం!</p>
 </header>
 
 <div class="search">
-  <input id="search" type="text"
-    placeholder="🔍 Anime వెతకండి...">
+<input id="search" placeholder="🔍 Anime వెతకండి...">
 </div>
 
 <h2>🔥 Popular Anime</h2>
 
 <div class="anime-list" id="animeList">
 
-  <div class="card">
-    <div class="poster">🥷</div>
-    <h3>Naruto</h3>
-    <button onclick="showAnime('Naruto')">View Anime</button>
-  </div>
+<div class="card" data-id="naruto">
+<div class="poster" id="photo-naruto">🥷</div>
+<h3 id="name-naruto">Naruto</h3>
+<button onclick="showAnime('Naruto')">View Anime</button>
+<button class="edit-btn" onclick="editAnime('naruto')">✏️ Edit</button>
+</div>
 
-  <div class="card">
-    <div class="poster">🏴‍☠️</div>
-    <h3>One Piece</h3>
-    <button onclick="showAnime('One Piece')">View Anime</button>
-  </div>
+<div class="card" data-id="onepiece">
+<div class="poster" id="photo-onepiece">🏴‍☠️</div>
+<h3 id="name-onepiece">One Piece</h3>
+<button onclick="showAnime('One Piece')">View Anime</button>
+<button class="edit-btn" onclick="editAnime('onepiece')">✏️ Edit</button>
+</div>
 
-  <div class="card">
-    <div class="poster">⚔️</div>
-    <h3>Demon Slayer</h3>
-    <button onclick="showAnime('Demon Slayer')">View Anime</button>
-  </div>
+<div class="card" data-id="demonslayer">
+<div class="poster" id="photo-demonslayer">⚔️</div>
+<h3 id="name-demonslayer">Demon Slayer</h3>
+<button onclick="showAnime('Demon Slayer')">View Anime</button>
+<button class="edit-btn" onclick="editAnime('demonslayer')">✏️ Edit</button>
+</div>
 
-  <div class="card">
-    <div class="poster">👊</div>
-    <h3>Dragon Ball</h3>
-    <button onclick="showAnime('Dragon Ball')">View Anime</button>
-  </div>
+<div class="card" data-id="dragonball">
+<div class="poster" id="photo-dragonball">👊</div>
+<h3 id="name-dragonball">Dragon Ball</h3>
+<button onclick="showAnime('Dragon Ball')">View Anime</button>
+<button class="edit-btn" onclick="editAnime('dragonball')">✏️ Edit</button>
+</div>
 
 </div>
+
+<!-- CUSTOMIZATION PANEL -->
+
+<section class="customizer" id="customizer">
+<h2>⚙️ Customize Anime</h2>
+
+<label>Anime Name:</label>
+<input id="editName" placeholder="Anime పేరు">
+
+<label>Choose Photo:</label>
+<input type="file" id="editPhoto" accept="image/*">
+
+<div class="preview" id="photoPreview">🖼️</div>
+
+<button onclick="saveAnime()">💾 Save Changes</button>
+<button onclick="resetAnime()" style="background:#514477">
+↩ Reset Anime
+</button>
+<button onclick="closeEditor()" style="background:#39304f">
+Close
+</button>
+
+<p class="message">
+ఫోటో 2 MB లోపు ఉండాలి. Save చేసిన మార్పులు ఈ బ్రౌజర్‌లో సేవ్ అవుతాయి.
+</p>
+</section>
 
 <!-- EPISODE PLAYER -->
 
 <section class="player-section" id="playerSection">
+<h2 id="animeTitle">Anime Episodes</h2>
 
-  <h2 id="animeTitle">Naruto Episodes</h2>
+<div class="video-container">
+<iframe id="videoPlayer"
+src=""
+title="Anime Episode Player"
+allowfullscreen>
+</iframe>
+</div>
 
-  <div class="video-container">
-    <iframe
-      id="videoPlayer"
-      src=""
-      title="Anime Episode Player"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen>
-    </iframe>
-  </div>
+<h3 id="episodeTitle">Episode 1</h3>
+<h3>📺 Episodes List</h3>
 
-  <h3 id="episodeTitle">Episode 1</h3>
+<div class="episode-list" id="episodeList"></div>
 
-  <p class="message">
-    మీకు ఉపయోగించడానికి అనుమతి ఉన్న వీడియోలను మాత్రమే జోడించండి.
-  </p>
-
-  <h3>📺 Episodes List</h3>
-
-  <div class="episode-list" id="episodeList"></div>
-
-  <div class="controls">
-    <button id="previousBtn" onclick="changeEpisode(-1)">
-      ⏮ Previous
-    </button>
-
-    <button id="nextBtn" onclick="changeEpisode(1)">
-      Next ⏭
-    </button>
-  </div>
-
+<div class="controls">
+<button id="previousBtn" onclick="changeEpisode(-1)">
+⏮ Previous
+</button>
+<button id="nextBtn" onclick="changeEpisode(1)">
+Next ⏭
+</button>
+</div>
 </section>
 
-<footer>
-  © 2026 ANIME WORLD
-</footer>
+<footer>© 2026 ANIME WORLD</footer>
 
 <script>
 
-  // Add more authorized video URLs here later.
-  const animeEpisodes = {
-    "Naruto": [
-      {
-        title: "Naruto - Episode 1",
-        video: "K0faGGsFcvo"
-      }
-    ]
-  };
+// Default anime information
+const defaults = {
+ naruto:{name:"Naruto",emoji:"🥷"},
+ onepiece:{name:"One Piece",emoji:"🏴‍☠️"},
+ demonslayer:{name:"Demon Slayer",emoji:"⚔️"},
+ dragonball:{name:"Dragon Ball",emoji:"👊"}
+};
 
-  let currentAnime = "";
-  let currentEpisode = 0;
+let customData = {};
+let selectedID = "";
+let selectedImage = "";
 
-  function showAnime(name) {
+// Load saved customization
+try {
+ customData = JSON.parse(
+   localStorage.getItem("animeCustomization") || "{}"
+ );
+} catch(e) {
+ customData = {};
+}
 
-    const player = document.getElementById("playerSection");
+function applyCustomization(){
 
-    player.style.display = "block";
+ Object.keys(defaults).forEach(id=>{
 
-    currentAnime = name;
-    currentEpisode = 0;
+  const data = customData[id] || defaults[id];
 
-    if (animeEpisodes[name]) {
-      document.getElementById("animeTitle").innerText =
-        name + " Episodes";
+  document.getElementById("name-"+id).textContent =
+    data.name || defaults[id].name;
 
-      renderEpisodes();
-      playEpisode(0);
+  const poster = document.getElementById("photo-"+id);
 
-    } else {
-      document.getElementById("animeTitle").innerText =
-        name;
+  poster.innerHTML = "";
 
-      document.getElementById("episodeTitle").innerText =
-        "Episodes త్వరలో జోడిస్తాం!";
-
-      document.getElementById("videoPlayer").src = "";
-
-      document.getElementById("episodeList").innerHTML =
-        '<p class="message">ఈ Anime కి Episodes ఇంకా జోడించలేదు.</p>';
-
-      updateControls();
-    }
-
-    player.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
+  if(data.image){
+    const img = document.createElement("img");
+    img.src = data.image;
+    img.alt = data.name || defaults[id].name;
+    poster.appendChild(img);
+  } else {
+    poster.textContent = defaults[id].emoji;
   }
 
-  function renderEpisodes() {
+ });
+}
 
-    const list = document.getElementById("episodeList");
+// Open editor
+function editAnime(id){
 
-    list.innerHTML = "";
+ selectedID = id;
 
-    const episodes = animeEpisodes[currentAnime];
+ const data = customData[id] || defaults[id];
 
-    episodes.forEach((episode, index) => {
+ document.getElementById("editName").value = data.name;
 
-      const button = document.createElement("button");
+ selectedImage = data.image || "";
 
-      button.className = "episode-btn";
+ showPreview(selectedImage);
 
-      button.innerText = episode.title;
+ document.getElementById("editPhoto").value = "";
 
-      button.onclick = () => playEpisode(index);
+ document.getElementById("customizer").style.display = "block";
 
-      button.id = "episode-" + index;
+ document.getElementById("customizer").scrollIntoView({
+  behavior:"smooth"
+ });
+}
 
-      list.appendChild(button);
+// Preview selected photo
+function showPreview(image){
 
-    });
+ const preview = document.getElementById("photoPreview");
+ preview.innerHTML = "";
+
+ if(image){
+  const img = document.createElement("img");
+  img.src = image;
+  preview.appendChild(img);
+ } else {
+  preview.textContent = "🖼️";
+ }
+}
+
+// Select photo
+document.getElementById("editPhoto").addEventListener("change",function(){
+
+ const file = this.files[0];
+
+ if(!file) return;
+
+ if(!file.type.startsWith("image/")){
+  alert("దయచేసి Image ఫైల్ ఎంచుకోండి!");
+  this.value = "";
+  return;
+ }
+
+ if(file.size > 2*1024*1024){
+  alert("Photo 2 MB కంటే తక్కువ ఉండాలి!");
+  this.value = "";
+  return;
+ }
+
+ const reader = new FileReader();
+
+ reader.onload = function(){
+  selectedImage = reader.result;
+  showPreview(selectedImage);
+ };
+
+ reader.readAsDataURL(file);
+
+});
+
+// Save customization
+function saveAnime(){
+
+ const name = document.getElementById("editName").value.trim();
+
+ if(!name){
+  alert("Anime పేరు నమోదు చేయండి!");
+  return;
+ }
+
+ const previous = customData[selectedID] || {};
+
+ const updated = {
+  name:name,
+  image:selectedImage
+ };
+
+ customData[selectedID] = updated;
+
+ try{
+  localStorage.setItem(
+    "animeCustomization",
+    JSON.stringify(customData)
+  );
+ } catch(e){
+  alert("Storage నిండిపోయింది. చిన్న ఫోటో ఎంచుకోండి.");
+  return;
+ }
+
+ applyCustomization();
+
+ alert("Anime Details Saved Successfully! 🎉");
+
+ closeEditor();
+}
+
+function resetAnime(){
+
+ if(!selectedID) return;
+
+ delete customData[selectedID];
+
+ localStorage.setItem(
+  "animeCustomization",
+  JSON.stringify(customData)
+ );
+
+ applyCustomization();
+
+ document.getElementById("editName").value =
+  defaults[selectedID].name;
+
+ selectedImage = "";
+ showPreview("");
+
+ alert("Default Anime restored!");
+
+}
+
+function closeEditor(){
+ document.getElementById("customizer").style.display = "none";
+}
+
+// Anime episode information
+const animeEpisodes = {
+ "Naruto":[
+  {
+   title:"Naruto - Episode 1",
+   video:"K0faGGsFcvo"
   }
+ ]
+};
 
-  function playEpisode(index) {
+let currentAnime = "";
+let currentEpisode = 0;
 
-    const episodes = animeEpisodes[currentAnime];
+function showAnime(name){
 
-    if (!episodes || index < 0 || index >= episodes.length) {
-      return;
-    }
+ currentAnime = name;
+ currentEpisode = 0;
 
-    currentEpisode = index;
+ const player = document.getElementById("playerSection");
 
-    const episode = episodes[index];
+ player.style.display = "block";
 
-    document.getElementById("episodeTitle").innerText =
-      episode.title;
+ if(animeEpisodes[name]){
 
-    document.getElementById("videoPlayer").src =
-      "https://www.youtube.com/embed/" + episode.video;
+  document.getElementById("animeTitle").textContent =
+   name+" Episodes";
 
-    document.querySelectorAll(".episode-btn").forEach((btn, i) => {
-      btn.classList.toggle("active", i === index);
-    });
+  renderEpisodes();
+  playEpisode(0);
 
-    updateControls();
-  }
+ }else{
 
-  function changeEpisode(direction) {
+  document.getElementById("animeTitle").textContent = name;
 
-    const episodes = animeEpisodes[currentAnime];
+  document.getElementById("episodeTitle").textContent =
+   "Episodes త్వరలో జోడిస్తాం!";
 
-    if (!episodes) return;
+  document.getElementById("videoPlayer").src = "";
 
-    const nextIndex = currentEpisode + direction;
+  document.getElementById("episodeList").textContent =
+   "ఈ Anime కి Episodes ఇంకా జోడించలేదు.";
 
-    if (nextIndex >= 0 && nextIndex < episodes.length) {
-      playEpisode(nextIndex);
-    }
-  }
+  updateControls();
+ }
 
-  function updateControls() {
+ player.scrollIntoView({behavior:"smooth"});
+}
 
-    const episodes = animeEpisodes[currentAnime] || [];
+function renderEpisodes(){
 
-    document.getElementById("previousBtn").disabled =
-      currentEpisode <= 0 || episodes.length === 0;
+ const list = document.getElementById("episodeList");
+ list.innerHTML = "";
 
-    document.getElementById("nextBtn").disabled =
-      currentEpisode >= episodes.length - 1 ||
-      episodes.length === 0;
-  }
+ animeEpisodes[currentAnime].forEach((episode,index)=>{
 
-  // Anime Search
+  const btn = document.createElement("button");
+  btn.className = "episode-btn";
+  btn.textContent = episode.title;
+  btn.onclick = ()=>playEpisode(index);
 
-  document.getElementById("search").addEventListener("input", function() {
+  list.appendChild(btn);
 
-    let value = this.value.toLowerCase();
+ });
+}
 
-    document.querySelectorAll(".card").forEach(card => {
+function playEpisode(index){
 
-      card.style.display =
-        card.innerText.toLowerCase().includes(value)
-        ? "" : "none";
+ const episodes = animeEpisodes[currentAnime];
 
-    });
+ if(!episodes || index<0 || index>=episodes.length) return;
 
-  });
+ currentEpisode = index;
+
+ const episode = episodes[index];
+
+ document.getElementById("episodeTitle").textContent =
+  episode.title;
+
+ document.getElementById("videoPlayer").src =
+  "https://www.youtube.com/embed/"+episode.video;
+
+ document.querySelectorAll(".episode-btn").forEach((btn,i)=>{
+  btn.classList.toggle("active",i===index);
+ });
+
+ updateControls();
+}
+
+function changeEpisode(direction){
+
+ const episodes = animeEpisodes[currentAnime];
+ if(!episodes) return;
+
+ const next = currentEpisode+direction;
+
+ if(next>=0 && next<episodes.length){
+  playEpisode(next);
+ }
+}
+
+function updateControls(){
+
+ const episodes = animeEpisodes[currentAnime] || [];
+
+ document.getElementById("previousBtn").disabled =
+  currentEpisode<=0 || episodes.length===0;
+
+ document.getElementById("nextBtn").disabled =
+  currentEpisode>=episodes.length-1 || episodes.length===0;
+}
+
+// Search
+document.getElementById("search").addEventListener("input",function(){
+
+ const value = this.value.toLowerCase();
+
+ document.querySelectorAll(".card").forEach(card=>{
+
+  card.style.display =
+   card.innerText.toLowerCase().includes(value) ? "" : "none";
+
+ });
+
+});
+
+// Apply saved photos and names on page load
+applyCustomization();
 
 </script>
 
 <script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./service-worker.js")
-        .catch(error => console.log("Service Worker:", error));
-    });
-  }
+if("serviceWorker" in navigator){
+ window.addEventListener("load",()=>{
+  navigator.serviceWorker.register("./service-worker.js")
+   .catch(error=>console.log(error));
+ });
+}
 </script>
 
 </body>
 </html>
-<div class="episode">
-  <h2>Naruto - Episode 1</h2>
-
-  <iframe
-    width="100%"
-    height="250"
-    src="https://www.youtube.com/embed/K0faGGsFcvo"
-    title="Naruto Episode 1"
-    allowfullscreen>
-  </iframe>
-</div>
