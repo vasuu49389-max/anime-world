@@ -1,39 +1,39 @@
-</head><link rel="manifest" href="./manifest.json"></body><script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js");
-  });
-}
-</script>
+
 <!DOCTYPE html>
 <html lang="te">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#090914">
+  <link rel="manifest" href="./manifest.json">
   <title>ANIME WORLD</title>
+
   <style>
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       background: #090914;
       color: white;
       font-family: Arial, sans-serif;
     }
+
     header {
       padding: 22px 16px;
       background: #151329;
       border-bottom: 1px solid #292443;
     }
+
     header h1 {
       color: #a78bfa;
       margin: 0;
       font-size: 26px;
     }
-    header p { color: #aaa; margin-bottom: 0; }
-    .search {
-      padding: 15px;
-    }
+
+    header p { color: #aaa; }
+
+    .search { padding: 15px; }
+
     input {
       width: 100%;
       padding: 14px;
@@ -43,19 +43,23 @@ if ("serviceWorker" in navigator) {
       color: white;
       font-size: 16px;
     }
+
     h2 { padding: 0 15px; }
+
     .anime-list {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 14px;
       padding: 15px;
     }
+
     .card {
       background: #19172a;
       border-radius: 14px;
       overflow: hidden;
       border: 1px solid #30294a;
     }
+
     .poster {
       height: 155px;
       display: grid;
@@ -63,7 +67,13 @@ if ("serviceWorker" in navigator) {
       font-size: 65px;
       background: linear-gradient(135deg,#45216b,#17152e);
     }
+
     .card h3 { padding: 0 10px; }
+
+    button {
+      cursor: pointer;
+    }
+
     .card button {
       margin: 0 10px 12px;
       width: calc(100% - 20px);
@@ -74,13 +84,94 @@ if ("serviceWorker" in navigator) {
       color: white;
       font-weight: bold;
     }
+
+    .player-section {
+      display: none;
+      padding: 15px;
+      margin: 15px;
+      background: #19172a;
+      border: 1px solid #514477;
+      border-radius: 14px;
+    }
+
+    .player-section h2 {
+      padding: 0;
+      color: #c4b5fd;
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: black;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .video-container iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .episode-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .episode-btn {
+      padding: 13px;
+      background: #292044;
+      color: white;
+      border: 1px solid #8055e9;
+      border-radius: 8px;
+      text-align: left;
+    }
+
+    .episode-btn.active {
+      background: #8055e9;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .controls button {
+      flex: 1;
+      padding: 12px 5px;
+      background: #8055e9;
+      color: white;
+      border: 0;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .controls button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .message {
+      color: #bbb;
+      line-height: 1.6;
+    }
+
     footer {
       text-align: center;
       padding: 25px;
       color: #888;
     }
+
+    @media (max-width: 360px) {
+      .anime-list { gap: 8px; padding: 10px; }
+      .poster { height: 120px; }
+    }
   </style>
 </head>
+
 <body>
 
 <header>
@@ -96,6 +187,7 @@ if ("serviceWorker" in navigator) {
 <h2>🔥 Popular Anime</h2>
 
 <div class="anime-list" id="animeList">
+
   <div class="card">
     <div class="poster">🥷</div>
     <h3>Naruto</h3>
@@ -119,36 +211,204 @@ if ("serviceWorker" in navigator) {
     <h3>Dragon Ball</h3>
     <button onclick="showAnime('Dragon Ball')">View Anime</button>
   </div>
+
 </div>
+
+<!-- EPISODE PLAYER -->
+
+<section class="player-section" id="playerSection">
+
+  <h2 id="animeTitle">Naruto Episodes</h2>
+
+  <div class="video-container">
+    <iframe
+      id="videoPlayer"
+      src=""
+      title="Anime Episode Player"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <h3 id="episodeTitle">Episode 1</h3>
+
+  <p class="message">
+    మీకు ఉపయోగించడానికి అనుమతి ఉన్న వీడియోలను మాత్రమే జోడించండి.
+  </p>
+
+  <h3>📺 Episodes List</h3>
+
+  <div class="episode-list" id="episodeList"></div>
+
+  <div class="controls">
+    <button id="previousBtn" onclick="changeEpisode(-1)">
+      ⏮ Previous
+    </button>
+
+    <button id="nextBtn" onclick="changeEpisode(1)">
+      Next ⏭
+    </button>
+  </div>
+
+</section>
 
 <footer>
   © 2026 ANIME WORLD
 </footer>
 
 <script>
+
+  // Add more authorized video URLs here later.
+  const animeEpisodes = {
+    "Naruto": [
+      {
+        title: "Naruto - Episode 1",
+        video: "K0faGGsFcvo"
+      }
+    ]
+  };
+
+  let currentAnime = "";
+  let currentEpisode = 0;
+
   function showAnime(name) {
-    alert(name + " - Episodes త్వరలో జోడిస్తాం!");
+
+    const player = document.getElementById("playerSection");
+
+    player.style.display = "block";
+
+    currentAnime = name;
+    currentEpisode = 0;
+
+    if (animeEpisodes[name]) {
+      document.getElementById("animeTitle").innerText =
+        name + " Episodes";
+
+      renderEpisodes();
+      playEpisode(0);
+
+    } else {
+      document.getElementById("animeTitle").innerText =
+        name;
+
+      document.getElementById("episodeTitle").innerText =
+        "Episodes త్వరలో జోడిస్తాం!";
+
+      document.getElementById("videoPlayer").src = "";
+
+      document.getElementById("episodeList").innerHTML =
+        '<p class="message">ఈ Anime కి Episodes ఇంకా జోడించలేదు.</p>';
+
+      updateControls();
+    }
+
+    player.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
   }
 
+  function renderEpisodes() {
+
+    const list = document.getElementById("episodeList");
+
+    list.innerHTML = "";
+
+    const episodes = animeEpisodes[currentAnime];
+
+    episodes.forEach((episode, index) => {
+
+      const button = document.createElement("button");
+
+      button.className = "episode-btn";
+
+      button.innerText = episode.title;
+
+      button.onclick = () => playEpisode(index);
+
+      button.id = "episode-" + index;
+
+      list.appendChild(button);
+
+    });
+  }
+
+  function playEpisode(index) {
+
+    const episodes = animeEpisodes[currentAnime];
+
+    if (!episodes || index < 0 || index >= episodes.length) {
+      return;
+    }
+
+    currentEpisode = index;
+
+    const episode = episodes[index];
+
+    document.getElementById("episodeTitle").innerText =
+      episode.title;
+
+    document.getElementById("videoPlayer").src =
+      "https://www.youtube.com/embed/" + episode.video;
+
+    document.querySelectorAll(".episode-btn").forEach((btn, i) => {
+      btn.classList.toggle("active", i === index);
+    });
+
+    updateControls();
+  }
+
+  function changeEpisode(direction) {
+
+    const episodes = animeEpisodes[currentAnime];
+
+    if (!episodes) return;
+
+    const nextIndex = currentEpisode + direction;
+
+    if (nextIndex >= 0 && nextIndex < episodes.length) {
+      playEpisode(nextIndex);
+    }
+  }
+
+  function updateControls() {
+
+    const episodes = animeEpisodes[currentAnime] || [];
+
+    document.getElementById("previousBtn").disabled =
+      currentEpisode <= 0 || episodes.length === 0;
+
+    document.getElementById("nextBtn").disabled =
+      currentEpisode >= episodes.length - 1 ||
+      episodes.length === 0;
+  }
+
+  // Anime Search
+
   document.getElementById("search").addEventListener("input", function() {
+
     let value = this.value.toLowerCase();
+
     document.querySelectorAll(".card").forEach(card => {
+
       card.style.display =
         card.innerText.toLowerCase().includes(value)
         ? "" : "none";
+
     });
+
   });
+
+</script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./service-worker.js")
+        .catch(error => console.log("Service Worker:", error));
+    });
+  }
 </script>
 
 </body>
 </html>
-
-<link rel="manifest" href="./manifest.json">
-
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js");
-  });
-}
-</script>
