@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090914">
+  <title>ANIME WORLD</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #090914;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      padding: 22px 16px;
+      background: #151329;
+      border-bottom: 1px solid #292443;
+    }
+    header h1 {
+      color: #a78bfa;
+      margin: 0;
+      font-size: 26px;
+    }
+    header p { color: #aaa; margin-bottom: 0; }
+    .search {
+      padding: 15px;
+    }
+    input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid #514477;
+      background: #1b1930;
+      color: white;
+      font-size: 16px;
+    }
+    h2 { padding: 0 15px; }
+    .anime-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      padding: 15px;
+    }
+    .card {
+      background: #19172a;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid #30294a;
+    }
+    .poster {
+      height: 155px;
+      display: grid;
+      place-items: center;
+      font-size: 65px;
+      background: linear-gradient(135deg,#45216b,#17152e);
+    }
+    .card h3 { padding: 0 10px; }
+    .card button {
+      margin: 0 10px 12px;
+      width: calc(100% - 20px);
+      padding: 11px;
+      border: 0;
+      border-radius: 8px;
+      background: #8055e9;
+      color: white;
+      font-weight: bold;
+    }
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>⚡ ANIME WORLD</h1>
+  <p>మీ Anime ప్రపంచంలోకి స్వాగతం!</p>
+</header>
+
+<div class="search">
+  <input id="search" type="text"
+    placeholder="🔍 Anime వెతకండి...">
+</div>
+
+<h2>🔥 Popular Anime</h2>
+
+<div class="anime-list" id="animeList">
+  <div class="card">
+    <div class="poster">🥷</div>
+    <h3>Naruto</h3>
+    <button onclick="showAnime('Naruto')">View Anime</button>
+  </div>
+
+  <div class="card">
+    <div class="poster">🏴‍☠️</div>
+    <h3>One Piece</h3>
+    <button onclick="showAnime('One Piece')">View Anime</button>
+  </div>
+
+  <div class="card">
+    <div class="poster">⚔️</div>
+    <h3>Demon Slayer</h3>
+    <button onclick="showAnime('Demon Slayer')">View Anime</button>
+  </div>
+
+  <div class="card">
+    <div class="poster">👊</div>
+    <h3>Dragon Ball</h3>
+    <button onclick="showAnime('Dragon Ball')">View Anime</button>
+  </div>
+</div>
+
+<footer>
+  © 2026 ANIME WORLD
+</footer>
+
+<script>
+  function showAnime(name) {
+    alert(name + " - Episodes త్వరలో జోడిస్తాం!");
+  }
+
+  document.getElementById("search").addEventListener("input", function() {
+    let value = this.value.toLowerCase();
+    document.querySelectorAll(".card").forEach(card => {
+      card.style.display =
+        card.innerText.toLowerCase().includes(value)
+        ? "" : "none";
+    });
+  });
+</script>
+
+</body>
+</html>
